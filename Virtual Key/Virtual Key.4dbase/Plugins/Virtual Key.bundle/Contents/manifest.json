@@ -1,0 +1,1 @@
+﻿{"name":"Virtual Key","id":20000,"commands":[{"theme":"Virtual Key","syntax":"POST VIRTUAL KEY(&L)"},{"theme":"Virtual Key","syntax":"Test virtual key(&L):L"}]}
