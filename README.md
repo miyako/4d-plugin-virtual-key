@@ -6,7 +6,7 @@ Example
 
 ```
   //full list of VKs can be found here
-  //https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731%28v=vs.85%29.as
+  //https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731
 
 POST VIRTUAL KEY (VK_CAPITAL)
 $caps:=Test virtual key (VK_CAPITAL)
