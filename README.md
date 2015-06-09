@@ -17,7 +17,7 @@ In ```modifiers``` pass one of the following [4D modifiers](http://doc.4d.com/4D
 
 On Mac, pass a standard Apple keyCode in ```keyCode```. You might find a list of keycodes [here](http://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes).
 
-In addition to the ```modifiers``` listed above, you can also pass the following constants: 
+In addition to the modifiers listed above, you can also pass the following constants: 
 
 * Function key mask 
 * Command control key mask 
@@ -34,7 +34,7 @@ Exposé the desktop (assuming the default fn+F11):
 POST VIRTUAL KEY (0x67;Function key mask)
 ```
 
-**Note**: This command is only implemented foe Windows.
+**Note**: This command is only implemented for Windows.
 
 ```
 $pressed:=Test virtual key (keyCode)
