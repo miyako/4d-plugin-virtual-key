@@ -22,7 +22,19 @@ In addition to the ```modifiers``` listed above, you can also pass the following
 * Function key mask 
 * Command control key mask 
 
-This command is only implemented foe Windows.
+Press "Windows" key:
+
+```
+POST VIRTUAL KEY (0x5B)
+```
+
+Exposé the desktop (assuming the default fn+F11): 
+
+```
+POST VIRTUAL KEY (0x67;Function key mask)
+```
+
+**Note**: This command is only implemented foe Windows.
 
 ```
 $pressed:=Test virtual key (keyCode)
