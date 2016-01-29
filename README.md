@@ -1,6 +1,24 @@
 # 4d-plugin-virtual-key
 4D plugin to post virtual key codes (CAPS, KANA, PRINT_SCREEN, etc.) on Windows and Mac.
 
+##Platform
+
+| carbon | cocoa | win32 | win64 |
+|:------:|:-----:|:---------:|:---------:|
+|🆗|🆗|🆗|🆗|
+
+Commands
+---
+
+```c
+// --- Virtual Key
+POST_VIRTUAL_KEY
+Test_virtual_key
+```
+
+Examples
+---
+
 ```
 POST VIRTUAL KEY (keyCode;modifiers)
 ```
@@ -39,9 +57,6 @@ POST VIRTUAL KEY (0x67;Function key mask)
 ```
 $pressed:=Test virtual key (keyCode)
 ```
-
-Example
----
 
 ```
   //full list of VKs can be found here
