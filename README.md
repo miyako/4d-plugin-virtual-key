@@ -50,11 +50,7 @@ Exposé the desktop (assuming the default fn+F11):
 
 ```
 POST VIRTUAL KEY (0x67;Function key mask)
-```
 
-**Note**: This command is only implemented for Windows.
-
-```
 $pressed:=Test virtual key (keyCode)
 ```
 
