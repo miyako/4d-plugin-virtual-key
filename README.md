@@ -1,27 +1,32 @@
 # 4d-plugin-virtual-key
 4D plugin to post virtual key codes (CAPS, KANA, PRINT_SCREEN, etc.) on Windows and Mac.
 
-##Platform
+### Platform
 
 | carbon | cocoa | win32 | win64 |
 |:------:|:-----:|:---------:|:---------:|
-|🆗|🆗|🆗|🆗|
+|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|<img src="https://cloud.githubusercontent.com/assets/1725068/22371562/1b091f0a-e4db-11e6-8458-8653954a7cce.png" width="24" height="24" />|
 
-Commands
----
-
-```c
-// --- Virtual Key
-POST_VIRTUAL_KEY
-Test_virtual_key
-```
-
-Examples
----
+## Syntax
 
 ```
 POST VIRTUAL KEY (keyCode;modifiers)
 ```
+
+Parameter|Type|Description
+------------|------------|----
+keyCode|LONGINT|
+modifiers|LONGINT|
+
+```
+pressed:=Test virtual key (keyCode)
+```
+
+Parameter|Type|Description
+------------|------------|----
+keyCode|LONGINT|
+pressed|LONGINT|
+
 In ```keyCode```, pass a standard Windows [virtual keycode](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
 
 In ```modifiers``` pass one of the following [4D modifiers](http://doc.4d.com/4Dv14/4D/14.3/Events-Modifiers.302-1697268.en.html):
@@ -40,6 +45,8 @@ In addition to the modifiers listed above, you can also pass the following const
 * Function key mask 
 * Command control key mask 
 
+### Examples
+
 Press "Windows" key:
 
 ```
@@ -52,9 +59,7 @@ Exposé the desktop (assuming the default fn+F11):
 POST VIRTUAL KEY (0x67;Function key mask)
 
 $pressed:=Test virtual key (keyCode)
-```
 
-```
   //full list of VKs can be found here
   //https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731
 
