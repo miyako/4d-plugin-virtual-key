@@ -27,7 +27,7 @@ Parameter|Type|Description
 keyCode|LONGINT|
 pressed|LONGINT|
 
-In ```keyCode```, pass a standard Windows [virtual keycode](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+In ```keyCode``` pass a standard Windows [virtual keycode](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
 
 In ```modifiers``` pass one of the following [4D modifiers](http://doc.4d.com/4Dv14/4D/14.3/Events-Modifiers.302-1697268.en.html):
 
