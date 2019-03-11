@@ -1,1 +1,5 @@
-﻿/* Localized versions of Info.plist keys */CFBundleName = "Virtual Key";CFBundleShortVersionString = "1.1";CFBundleGetInfoString = "Virtual Key version 1.1, Copyright 2015 miyako.";
+/* Localized versions of Info.plist keys */
+
+CFBundleName = "Virtual Key";
+CFBundleShortVersionString = "2.0";
+CFBundleGetInfoString = "Virtual Key version 2.0, Copyright 2019 miyako.";

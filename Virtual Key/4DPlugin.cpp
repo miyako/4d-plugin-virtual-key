@@ -120,105 +120,42 @@ void POST_VIRTUAL_KEY(sLONG_PTR *pResult, PackagePtr pParams)
         CGEventRef e;
             
         CGEventSourceRef eventSource = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);    
-            
+        CGEventFlags eventFlags = 0;
+     
+        if(leftControlDown || rightControlDown){
+            eventFlags += NX_CONTROLMASK;
+        }
+        
+        if(leftOptionDown || rightOptionDown){
+            eventFlags += NX_ALTERNATEMASK;
+        }
+        
+        if(leftShiftDown || rightShiftDown){
+            eventFlags += NX_SHIFTMASK;
+        }
+        
+        if(commandDown){
+            eventFlags += NX_COMMANDMASK;
+        }
+
         if(functionDown){
             e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Function, true);
             CGEventPost(kCGHIDEventTap, e);
             CFRelease(e);
         }
 
-        if(commandDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Command, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        }    
-
-        if(leftControlDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Control, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-
-        if(rightControlDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightControl, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-
-        if(leftOptionDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Option, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-
-        if(rightOptionDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightOption, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-
-        if(leftShiftDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Shift, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-
-        if(rightShiftDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightShift, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
+        /* the actual key up-down event  */
                         
             e = CGEventCreateKeyboardEvent (eventSource, keycode, true);
+            CGEventSetFlags(e, eventFlags );
             CGEventPost(kCGHIDEventTap, e);
             CFRelease(e);   
                
             e = CGEventCreateKeyboardEvent (eventSource, keycode, false);
+            CGEventSetFlags(e, eventFlags );
             CGEventPost(kCGHIDEventTap, e);
             CFRelease(e);    
 
-        if(rightShiftDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightShift, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(leftShiftDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Shift, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(rightOptionDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightOption, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(leftOptionDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Option, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(rightControlDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_RightControl, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(leftControlDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Control, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-        
-        if(commandDown){
-            e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Command, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
-        } 
-                    
         if(functionDown){
             e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Function, false);
             CGEventPost(kCGHIDEventTap, e);
