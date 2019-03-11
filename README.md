@@ -9,7 +9,7 @@
 
 ### Releases
 
-[2.0](https://github.com/miyako/4d-plugin-virtual-key/releases/tag/2.0)
+[2.0-carbon](https://github.com/miyako/4d-plugin-virtual-key/releases/tag/2.0-carbon) 
 
 ## Syntax
 
