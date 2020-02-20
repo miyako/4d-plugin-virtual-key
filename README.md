@@ -81,7 +81,7 @@ Parameter|Type|Description
 keyCode|LONGINT|
 pressed|LONGINT|
 
-In ```keyCode``` pass a standard Windows [virtual keycode](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731).
+In ```keyCode``` pass a standard Windows [virtual keycode](https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731) or a [standard Apple keyCode](http://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes).
 
 In ```modifiers``` pass one of the following [4D modifiers](http://doc.4d.com/4Dv14/4D/14.3/Events-Modifiers.302-1697268.en.html):
 
@@ -91,8 +91,6 @@ In ```modifiers``` pass one of the following [4D modifiers](http://doc.4d.com/4D
 * Right option key mask 
 * Shift key mask 
 * Right shift key mask 
-
-On Mac, pass a standard Apple keyCode in ```keyCode```. You might find a list of keycodes [here](http://stackoverflow.com/questions/3202629/where-can-i-find-a-list-of-mac-virtual-key-codes).
 
 In addition to the modifiers listed above, you can also pass the following constants: 
 
