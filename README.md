@@ -17,7 +17,7 @@ On Mac, privacy access must be granted.
 
 <img width="573" alt="Screen Shot 2020-02-21 at 7 01 27" src="https://user-images.githubusercontent.com/1725068/74982777-13031800-5478-11ea-9210-019c216ae263.png">
 
-## Example
+## Examples
 
 * invoke Runtimer Explorer
 
@@ -30,6 +30,35 @@ Case of
 End case 
 
 POST VIRTUAL KEY ($kVK_F9;Command key mask | Shift key mask)
+```
+
+* Press "Windows" key:
+
+```
+POST VIRTUAL KEY (0x5B)
+```
+
+* Exposé the desktop (assuming the default fn+F11): 
+
+```
+POST VIRTUAL KEY (0x67;Function key mask)
+
+$pressed:=Test virtual key (keyCode)
+
+  //full list of VKs can be found here
+  //https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731
+
+POST VIRTUAL KEY (VK_CAPITAL)
+$caps:=Test virtual key (VK_CAPITAL)
+
+POST VIRTUAL KEY (VK_NUMLOCK)
+$num:=Test virtual key (VK_NUMLOCK)
+
+POST VIRTUAL KEY (VK_KANA)
+$kana:=Test virtual key (VK_KANA)
+
+POST VIRTUAL KEY (VK_SNAPSHOT)
+GET PICTURE FROM PASTEBOARD($image)
 ```
 
 ## Syntax
@@ -69,34 +98,3 @@ In addition to the modifiers listed above, you can also pass the following const
 
 * Function key mask 
 * Command control key mask 
-
-### Examples
-
-Press "Windows" key:
-
-```
-POST VIRTUAL KEY (0x5B)
-```
-
-Exposé the desktop (assuming the default fn+F11): 
-
-```
-POST VIRTUAL KEY (0x67;Function key mask)
-
-$pressed:=Test virtual key (keyCode)
-
-  //full list of VKs can be found here
-  //https://msdn.microsoft.com/en-us/library/windows/desktop/dd375731
-
-POST VIRTUAL KEY (VK_CAPITAL)
-$caps:=Test virtual key (VK_CAPITAL)
-
-POST VIRTUAL KEY (VK_NUMLOCK)
-$num:=Test virtual key (VK_NUMLOCK)
-
-POST VIRTUAL KEY (VK_KANA)
-$kana:=Test virtual key (VK_KANA)
-
-POST VIRTUAL KEY (VK_SNAPSHOT)
-GET PICTURE FROM PASTEBOARD($image)
-```
