@@ -17,6 +17,21 @@ On Mac, privacy access must be granted.
 
 <img width="573" alt="Screen Shot 2020-02-21 at 7 01 27" src="https://user-images.githubusercontent.com/1725068/74982777-13031800-5478-11ea-9210-019c216ae263.png">
 
+## Example
+
+* invoke Runtimer Explorer
+
+```
+Case of 
+	: (Is macOS)
+		$kVK_F9:=0x0065
+	: (Is Windows)
+		$kVK_F9:=0x0078
+End case 
+
+POST VIRTUAL KEY ($kVK_F9;Command key mask | Shift key mask)
+```
+
 ## Syntax
 
 ```
