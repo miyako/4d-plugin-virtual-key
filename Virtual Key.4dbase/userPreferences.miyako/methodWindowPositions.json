@@ -1,0 +1,44 @@
+{
+	"Sources/Methods/Method1.4dm": {
+		"left": 595,
+		"top": 143,
+		"width": 958,
+		"height": 808
+	},
+	"Sources/Methods/Method2.4dm": {
+		"left": 462,
+		"top": 196,
+		"width": 768,
+		"height": 586
+	},
+	"Sources/Methods/Method3.4dm": {
+		"left": 585,
+		"top": 141,
+		"width": 958,
+		"height": 808
+	},
+	"Sources/Methods/Method4.4dm": {
+		"left": 612,
+		"top": 123,
+		"width": 958,
+		"height": 808
+	},
+	"Sources/Methods/Method5.4dm": {
+		"left": 468,
+		"top": 251,
+		"width": 1303,
+		"height": 815
+	},
+	"Sources/Methods/TEST_runtime_explorer.4dm": {
+		"left": 872,
+		"top": 400,
+		"width": 958,
+		"height": 804
+	},
+	"Sources/Forms/ÉtÉHÅ[ÉÄ1/ObjectMethods/Button.4dm": {
+		"left": 348,
+		"top": 151,
+		"width": 1303,
+		"height": 815
+	}
+}
