@@ -67,6 +67,15 @@ void POST_VIRTUAL_KEY(sLONG_PTR *pResult, PackagePtr pParams)
 	Param1.fromParamAtIndex(pParams, 1);
 	Param2.fromParamAtIndex(pParams, 2);
 
+	PA_long32 rawKeyCode = Param1.getIntValue();
+
+	// Both native destinations for this value (WORD wVk on Windows, CGKeyCode on Mac)
+	// are 16-bit unsigned. Reject anything that wouldn't fit instead of letting it
+	// truncate silently into a different, unintended key code.
+	if(rawKeyCode < 0 || rawKeyCode > 0xFFFF){
+		return;
+	}
+
 	unsigned int modifiers = Param2.getIntValue();
 
     BOOL functionDown = (modifiers >> Function_key_bit) & 1;
@@ -83,7 +92,7 @@ void POST_VIRTUAL_KEY(sLONG_PTR *pResult, PackagePtr pParams)
 
 #if VERSIONMAC
         
-    CGKeyCode keycode = (CGKeyCode)Param1.getIntValue();
+    CGKeyCode keycode = (CGKeyCode)rawKeyCode;
     
     if(keycode == kVK_CapsLock){
     
@@ -119,50 +128,60 @@ void POST_VIRTUAL_KEY(sLONG_PTR *pResult, PackagePtr pParams)
     
         CGEventRef e;
             
-        CGEventSourceRef eventSource = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);    
+        CGEventSourceRef eventSource = CGEventSourceCreate(kCGEventSourceStateHIDSystemState);
         CGEventFlags eventFlags = 0;
      
         if(leftControlDown || rightControlDown){
-            eventFlags += NX_CONTROLMASK;
+            eventFlags |= NX_CONTROLMASK;
         }
         
         if(leftOptionDown || rightOptionDown){
-            eventFlags += NX_ALTERNATEMASK;
+            eventFlags |= NX_ALTERNATEMASK;
         }
         
         if(leftShiftDown || rightShiftDown){
-            eventFlags += NX_SHIFTMASK;
+            eventFlags |= NX_SHIFTMASK;
         }
         
         if(commandDown){
-            eventFlags += NX_COMMANDMASK;
+            eventFlags |= NX_COMMANDMASK;
         }
 
         if(functionDown){
             e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Function, true);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
+            if(e){
+                CGEventPost(kCGHIDEventTap, e);
+                CFRelease(e);
+            }
         }
 
         /* the actual key up-down event  */
                         
             e = CGEventCreateKeyboardEvent (eventSource, keycode, true);
-            CGEventSetFlags(e, eventFlags );
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);   
-               
+            if(e){
+                CGEventSetFlags(e, eventFlags );
+                CGEventPost(kCGHIDEventTap, e);
+                CFRelease(e);
+            }
+
             e = CGEventCreateKeyboardEvent (eventSource, keycode, false);
-            CGEventSetFlags(e, eventFlags );
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);    
+            if(e){
+                CGEventSetFlags(e, eventFlags );
+                CGEventPost(kCGHIDEventTap, e);
+                CFRelease(e);
+            }
 
         if(functionDown){
             e = CGEventCreateKeyboardEvent (eventSource, (CGKeyCode)kVK_Function, false);
-            CGEventPost(kCGHIDEventTap, e);
-            CFRelease(e);
+            if(e){
+                CGEventPost(kCGHIDEventTap, e);
+                CFRelease(e);
+            }
         }  
         
-        CFRelease(eventSource);
+        if(eventSource){
+            CFRelease(eventSource);
+        }
     }
 #endif
 
@@ -215,7 +234,7 @@ void POST_VIRTUAL_KEY(sLONG_PTR *pResult, PackagePtr pParams)
                      
         ZeroMemory(e, sizeof(e)); 
         e[0].type = e[1].type = INPUT_KEYBOARD;
-        e[0].ki.wVk = e[1].ki.wVk = Param1.getIntValue();
+        e[0].ki.wVk = e[1].ki.wVk = (WORD)rawKeyCode;
         e[1].ki.dwFlags =KEYEVENTF_KEYUP;
         SendInput(2, e, sizeof(INPUT));
 
