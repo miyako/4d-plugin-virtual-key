@@ -16,6 +16,135 @@ The Virtual Key plugin lets 4D methods simulate native keyboard input and query 
 
 **Platforms:** macOS, Windows
 
+## Manual release workflows
+
+1. Run **Bump version** on an explicit branch, choosing `patch`, `minor`, or
+   `major`. It validates the selected immutable commit and changes source version
+   metadata only. It pushes one direct-child commit to that branch, with the
+   Copilot co-author trailer. It does not create tags, dispatch Build, or publish.
+2. Separately run **Build** on the desired branch. There are **zero custom
+   inputs**: the Actions branch selector selects the source, and every checkout
+   uses `github.sha`. Source version `X.Y.Z` determines tag/release name `vX.Y.Z`
+   and assets `Virtual Key-X.Y.Z.zip` and `Virtual Key-X.Y.Z.dmg`.
+
+The bump requires a clean checkout and a branch still at the dispatch SHA, both
+before preparation and immediately before pushing. Its mandatory executable
+`.github/scripts/bump-hooks/pre-push` checks the receive-pack advertisement:
+exact selected old SHA, exact new local SHA/HEAD, one parent, exact target, and
+exactly one branch update. Advances, rewinds, deletion, and an already-pushed
+same-result commit fail closed. The non-force push disables follow-tags both in
+configuration and on the command line; only the three source metadata paths may
+change in the generated commit.
+
+Build retains Windows Release/x64 with the existing `v143`/Windows SDK `10.0`
+workflow overrides, then macOS `Default`, `arm64 x86_64`, deployment override
+`10.13`, certificate import, credential storage, signing and strict verification,
+ZIP/DMG packaging, both notarizations, and DMG stapling. Native project
+toolchains/settings, the Deployment-only project signing script, resources,
+dependencies, artifact name `windows-binaries`, and the six existing secret
+names are unchanged. No native build, signing, notarization, 4D execution, or
+Actions dispatch is needed to validate this migration.
+
+### Version authority and migration evidence
+
+At intake `6d8a79b73db21657b831016624ee0fcbb4a19859`, all six
+`MARKETING_VERSION` settings and source `Info.plist` agree on `2.4.5`.
+Rename-follow history reaches `934bdc4` (`mv`, moving the native sources out of
+`Virtual Key/`): that original bump header was marketing-first/current-only
+fallback, which alone would **not** authorize changing independent build metadata.
+However, `1ab70929242934cbd663d212cd0aa1e4b1ba30dd` explicitly superseded it:
+the new header promises the exact same version in
+`MARKETING_VERSION`/**`CURRENT_PROJECT_VERSION`** and
+`CFBundleShortVersionString`/**`CFBundleVersion`**. `4d0cf89` then corrected
+the project path. The body still selected only marketing, leaving all six build
+settings at `2.4.2` despite subsequent marketing bumps.
+
+This migration repairs those six proven-drift build literals to the **existing**
+`2.4.5`, with **no intake increment**. It also repairs the two stale `2.3`
+display versions in `English.lproj/InfoPlist.strings`, which Xcode actually
+copies through its variant group and Resources phase. The product name and
+`Copyright 2020 miyako.` are retained verbatim. Source `Info.plist` already has
+the correct short version and has **no `CFBundleVersion`**; no optional key is
+added. No prebuilt bundle, 4D database/catalog, schema/manifest, localization
+counter, API/dependency, native implementation, or archive is version authority.
+
+Future bumps validate all six coordinated settings, the source plist and copied
+English display strings before any write. Only strict `X.Y.Z` literals and
+resolvable `$(MARKETING_VERSION)`/`${MARKETING_VERSION}` and
+`$(CURRENT_PROJECT_VERSION)`/`${CURRENT_PROJECT_VERSION}` plist references are
+accepted. Build settings may reference marketing, not themselves. Supported
+references and absent optional build keys are preserved. Duplicate plist keys
+and quoted/unquoted/inline localized duplicates are rejected. Rewrites preserve
+BOM, each LF/CRLF/CR ending (including mixed endings), modes, quoting, whitespace,
+copyright, and unrelated bytes.
+
+The exact committed prior art was inspected and adapted, not copied as platform
+authority: `miyako/4d-plugin-native-encoding-detection` at
+`c42ca565857f674bde5ea6ed3435c87375eda4a7` (six coordinated configurations,
+strict localized tokenizer, fail-closed Windows cleanup);
+`miyako/4d-plugin-file-information` at
+`19848973601acfd3a2b5070230fa40cdc7e4edb2` (three coordinated configurations,
+UTF-16/binary built strings, explicit no-i386 gate); and the independent-build
+contracts in `miyako/4d-plugin-common-string-algorithm` at
+`2606a68201866ec9fcbb38b51462d79215f504ef` and corrected
+`miyako/4d-plugin-window-button` at
+`3f14facb9aaaaff0e22eeb8e07531163680c3a8a`.
+Virtual Key's actual later coordinated header controls this repository; the
+other repositories' counts, dependencies, platforms, and branch restrictions
+are not imported.
+
+### Native freshness and publication safety
+
+The original automatic trigger was only a `v*.*.*` tag push; its manual Build
+also required an existing-tag input. Both are replaced by input-free manual
+Build; there were no intentional branch restrictions or unrelated workflows
+to remove.
+
+The canonical layout remains intentionally `test/Plugins/Virtual Key.bundle`.
+The actual Release/x64 `OutDir` in `Virtual Key.vcxproj` is instead
+`Virtual Key.4dbase/plugins/Virtual Key.bundle/contents/windows64/Virtual Key.4DX`.
+Only that rebuilt Windows binary and existing intermediates are invalidated;
+normalization requires that exact nonempty output, not a recursive first match.
+The macOS build invalidates only its rebuilt executable, plist, English strings,
+signature and intermediates, preserving other resources and the Windows
+artifact. It requires both exact architecture slices and verifies the built
+plist/localized versions (including Xcode's UTF-16 and compiled plist forms)
+against source. Virtual Key's original workflow had no explicit i386 rejection;
+no existing gate is removed or replaced by a weaker required-slices check.
+Notarytool must report **Accepted** for both submissions before stapling or
+publication; a zero exit with `Invalid` is not success.
+
+Publication has one repository-wide, cross-branch concurrency group
+`release-publication`, with cancellation disabled. Both before native work and
+after all native/sign/notary/staple gates, it checks the exact remote tag and
+authenticated, fully paginated release lists, including drafts. Authentication,
+network, 404, malformed responses, and errors on any later page stop publication.
+Creation is strictly ordered: POST a new ref at the selected SHA, verify that
+remote ref, POST a **new public non-prerelease** release with explicit tag,
+target SHA, name and original empty body/no generated notes, then POST each
+asset to the newly returned release ID. A concurrent same-SHA tag creation is
+still a conflict. There is no reuse, edit, deletion, clobber, rollback, or retry.
+
+**Recovery:** on any error, all remote state is retained. Inspect the reported
+tag/SHA, release ID and uploaded assets (a failed or malformed response may
+already have created state). A release failure can leave just the tag; an upload
+failure can leave the public release and earlier assets. Do not retry expecting
+repair or automatic cleanup, and do not delete/reuse/clobber that version through
+these workflows. Resolve partial publication deliberately outside automation;
+use a separately reviewed source bump and fresh version for a new publication.
+
+Offline checks (including real disposable bare-Git races, mocked API payloads
+and retention, closed-PATH native stubs, and PowerShell file-only checks):
+
+```sh
+actionlint .github/workflows/*.yml
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s .github/tests -v
+```
+
+The same complete suite must pass on live metadata and a disposable post-bump
+copy; fixture versions derive from source rather than pinning future releases.
+PowerShell (`pwsh`) is required to exercise the Windows shell tests.
+
 ---
 
 ## Requirements & platform notes
