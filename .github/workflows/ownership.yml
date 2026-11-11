@@ -1,0 +1,27 @@
+name: Native ownership
+
+on:
+  push:
+    branches: [master, miyako-virtual-key-ownership]
+    paths:
+      - '4D Plugin API/**'
+      - '4DPlugin.cpp'
+      - '4DPlugin.h'
+      - '.github/tests/ownership*'
+      - '.github/tests/test_ownership.py'
+      - '.github/workflows/ownership.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  ownership:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Unsigned synthetic full-source sanitizer regressions
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python3 .github/tests/test_ownership.py

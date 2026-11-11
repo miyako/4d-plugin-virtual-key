@@ -16,6 +16,21 @@ The Virtual Key plugin lets 4D methods simulate native keyboard input and query 
 
 **Platforms:** macOS, Windows
 
+## Native ownership regression checks
+
+The shared picture/pointer wrappers have ownership fixes and heap-owning wrappers
+prohibit shallow copying. These wrappers are compiled into the plugin, but neither
+public long-integer command calls the picture/pointer paths. This is not a
+reproduction of a Windows/4D crash.
+
+On macOS, run `PYTHONDONTWRITEBYTECODE=1 python3 .github/tests/test_ownership.py`.
+It compiles the actual dispatcher, all 16 wrappers and the complete unchanged
+bundled SDK in an unsigned sanitizer host. Keyboard/input, path and image
+boundaries are synthetic before compilation; no real key state or input is used.
+The same harness also checks the immutable pre-fix source. See the
+[ownership inventory, contracts, results and limits](.github/tests/ownership-audit.md).
+The separate **Native ownership** push workflow does not build or publish a plugin.
+
 ## Manual release workflows
 
 1. Run **Bump version** on an explicit branch, choosing `patch`, `minor`, or
